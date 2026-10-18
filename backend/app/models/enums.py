@@ -1,0 +1,495 @@
+from enum import Enum
+
+class UserRole(str, Enum):
+    OWNER = "OWNER"
+    ADMIN = "ADMIN"
+    RECRUITER = "RECRUITER"
+    VIEWER = "VIEWER"
+
+class InvitationStatus(str, Enum):
+    PENDING = "PENDING"
+    ACCEPTED = "ACCEPTED"
+    EXPIRED = "EXPIRED"
+    CANCELLED = "CANCELLED"
+
+class WorkMode(str, Enum):
+    ONSITE = "ONSITE"
+    HYBRID = "HYBRID"
+    REMOTE = "REMOTE"
+
+class EmploymentType(str, Enum):
+    FULL_TIME = "FULL_TIME"
+    PART_TIME = "PART_TIME"
+    CONTRACT = "CONTRACT"
+    INTERNSHIP = "INTERNSHIP"
+
+class JobStatus(str, Enum):
+    DRAFT = "DRAFT"
+    ACTIVE = "ACTIVE"
+    PAUSED = "PAUSED"
+    ARCHIVED = "ARCHIVED"
+    CLOSED = "CLOSED"
+
+class RequirementType(str, Enum):
+    SKILL = "SKILL"
+    EXPERIENCE = "EXPERIENCE"
+    EDUCATION = "EDUCATION"
+    CERTIFICATION = "CERTIFICATION"
+    LOCATION = "LOCATION"
+    OTHER = "OTHER"
+
+class CandidateProfileStatus(str, Enum):
+    ACTIVE = "ACTIVE"
+    ARCHIVED = "ARCHIVED"
+    PLACED = "PLACED"
+    INACTIVE = "INACTIVE"
+
+class SkillProficiency(str, Enum):
+    BEGINNER = "BEGINNER"
+    INTERMEDIATE = "INTERMEDIATE"
+    ADVANCED = "ADVANCED"
+    EXPERT = "EXPERT"
+
+class ResumeProcessingStatus(str, Enum):
+    UPLOADED = "UPLOADED"
+    QUEUED = "QUEUED"
+    EXTRACTING = "EXTRACTING"
+    EXTRACTED = "EXTRACTED"
+    PARSING = "PARSING"
+    REVIEW_REQUIRED = "REVIEW_REQUIRED"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+ResumeStatus = ResumeProcessingStatus
+
+class VerificationStatus(str, Enum):
+    UNREVIEWED = "UNREVIEWED"
+    VERIFIED = "VERIFIED"
+    CORRECTED = "CORRECTED"
+    REJECTED = "REJECTED"
+
+class RecruiterReviewStatus(str, Enum):
+    PENDING = "PENDING"
+    VERIFIED = "VERIFIED"
+    CORRECTED = "CORRECTED"
+    REJECTED = "REJECTED"
+
+class ParseRunStatus(str, Enum):
+    PENDING = "PENDING"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+class MatchStatus(str, Enum):
+    DEMONSTRATED = "DEMONSTRATED"
+    PARTIAL = "PARTIAL"
+    NOT_FOUND = "NOT_FOUND"
+    NEEDS_VERIFICATION = "NEEDS_VERIFICATION"
+
+MatchEvidenceStatus = MatchStatus
+
+class JobMatchRunStatus(str, Enum):
+    PENDING = "PENDING"
+    PROCESSING = "PROCESSING"
+    COMPLETED = "COMPLETED"
+    PARTIALLY_COMPLETED = "PARTIALLY_COMPLETED"
+    FAILED = "FAILED"
+
+class PipelineStageType(str, Enum):
+    APPLIED = "APPLIED"
+    UNDER_REVIEW = "UNDER_REVIEW"
+    SHORTLISTED = "SHORTLISTED"
+    INTERVIEW = "INTERVIEW"
+    SELECTED = "SELECTED"
+    REJECTED = "REJECTED"
+    ON_HOLD = "ON_HOLD"
+    WITHDRAWN = "WITHDRAWN"
+
+
+class InterviewMode(str, Enum):
+    ONLINE = "ONLINE"
+    IN_PERSON = "IN_PERSON"
+    PHONE = "PHONE"
+
+
+class InterviewStatus(str, Enum):
+    DRAFT = "DRAFT"
+    SCHEDULED = "SCHEDULED"
+    CONFIRMED = "CONFIRMED"
+    COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
+    RESCHEDULED = "RESCHEDULED"
+
+
+class InterviewRoundType(str, Enum):
+    SCREENING = "SCREENING"
+    TECHNICAL = "TECHNICAL"
+    SYSTEM_DESIGN = "SYSTEM_DESIGN"
+    BEHAVIORAL = "BEHAVIORAL"
+    MANAGERIAL = "MANAGERIAL"
+    CULTURE_FIT = "CULTURE_FIT"
+    EXECUTIVE = "EXECUTIVE"
+    FINAL = "FINAL"
+    OTHER = "OTHER"
+
+
+class ParticipantRole(str, Enum):
+    INTERVIEWER = "INTERVIEWER"
+    RECRUITER = "RECRUITER"
+    OBSERVER = "OBSERVER"
+
+
+class AttendanceStatus(str, Enum):
+    INVITED = "INVITED"
+    ACCEPTED = "ACCEPTED"
+    DECLINED = "DECLINED"
+    ATTENDED = "ATTENDED"
+    NO_SHOW = "NO_SHOW"
+
+
+class FeedbackRecommendation(str, Enum):
+    STRONG_YES = "STRONG_YES"
+    YES = "YES"
+    MAYBE = "MAYBE"
+    NO = "NO"
+    STRONG_NO = "STRONG_NO"
+
+
+class NotificationType(str, Enum):
+    INTERVIEW_SCHEDULED = "INTERVIEW_SCHEDULED"
+    INTERVIEW_CONFIRMED = "INTERVIEW_CONFIRMED"
+    INTERVIEW_RESCHEDULED = "INTERVIEW_RESCHEDULED"
+    INTERVIEW_CANCELLED = "INTERVIEW_CANCELLED"
+    INTERVIEW_COMPLETED = "INTERVIEW_COMPLETED"
+    APPLICATION_STATUS_UPDATED = "APPLICATION_STATUS_UPDATED"
+    SYSTEM = "SYSTEM"
+
+
+class NotificationDeliveryStatus(str, Enum):
+    PENDING = "PENDING"
+    PROCESSING = "PROCESSING"
+    SENT = "SENT"
+    FAILED = "FAILED"
+    DEAD_LETTER = "DEAD_LETTER"
+
+
+class ExpenseCategory(str, Enum):
+    JOB_ADVERTISING = "JOB_ADVERTISING"
+    RECRUITMENT_PLATFORMS = "RECRUITMENT_PLATFORMS"
+    AGENCY_FEES = "AGENCY_FEES"
+    ASSESSMENT_COSTS = "ASSESSMENT_COSTS"
+    INTERVIEW_EXPENSES = "INTERVIEW_EXPENSES"
+    OTHER = "OTHER"
+
+
+class CalendarProviderType(str, Enum):
+    GOOGLE = "GOOGLE"
+    MICROSOFT = "MICROSOFT"
+    MOCK = "MOCK"
+
+
+class CalendarSyncStatus(str, Enum):
+    SYNCED = "SYNCED"
+    PENDING = "PENDING"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+
+
+class CalendarSyncDirection(str, Enum):
+    OUTBOUND = "OUTBOUND"
+    INBOUND = "INBOUND"
+
+
+class CalendarSyncOperation(str, Enum):
+    CREATE = "CREATE"
+    UPDATE = "UPDATE"
+    CANCEL = "CANCEL"
+    RESYNC = "RESYNC"
+
+
+class MeetingProviderType(str, Enum):
+    GOOGLE_MEET = "GOOGLE_MEET"
+    MS_TEAMS = "MS_TEAMS"
+    NONE = "NONE"
+
+
+class CopilotActionType(str, Enum):
+    CHAT = "CHAT"
+    JOB_DESCRIPTION_GENERATE = "JOB_DESCRIPTION_GENERATE"
+    JOB_DESCRIPTION_IMPROVE = "JOB_DESCRIPTION_IMPROVE"
+    JOB_DESCRIPTION_ANALYZE = "JOB_DESCRIPTION_ANALYZE"
+    CANDIDATE_COMPARE = "CANDIDATE_COMPARE"
+    INTERVIEW_PREPARE = "INTERVIEW_PREPARE"
+    ANALYTICS_EXPLAIN = "ANALYTICS_EXPLAIN"
+
+
+class CopilotMessageRole(str, Enum):
+    USER = "USER"
+    ASSISTANT = "ASSISTANT"
+    SYSTEM = "SYSTEM"
+
+
+class CopilotContextType(str, Enum):
+    AGENCY_OVERVIEW = "AGENCY_OVERVIEW"
+    JOB = "JOB"
+    CANDIDATE = "CANDIDATE"
+    APPLICATION = "APPLICATION"
+    INTERVIEW = "INTERVIEW"
+    ANALYTICS = "ANALYTICS"
+
+
+# --- Phase 11: Workflow Automation & Orchestration Enums ---
+
+
+class WorkflowTriggerType(str, Enum):
+    CANDIDATE_CREATED = "CANDIDATE_CREATED"
+    RESUME_PROCESSED = "RESUME_PROCESSED"
+    CANDIDATE_MATCHED = "CANDIDATE_MATCHED"
+    APPLICATION_SUBMITTED = "APPLICATION_SUBMITTED"
+    APPLICATION_STAGE_CHANGED = "APPLICATION_STAGE_CHANGED"
+    INTERVIEW_SCHEDULED = "INTERVIEW_SCHEDULED"
+    INTERVIEW_RESCHEDULED = "INTERVIEW_RESCHEDULED"
+    INTERVIEW_COMPLETED = "INTERVIEW_COMPLETED"
+    FEEDBACK_SUBMITTED = "FEEDBACK_SUBMITTED"
+    CANDIDATE_INACTIVE = "CANDIDATE_INACTIVE"
+
+
+class WorkflowActionType(str, Enum):
+    SEND_CANDIDATE_COMMUNICATION = "SEND_CANDIDATE_COMMUNICATION"
+    NOTIFY_RECRUITERS = "NOTIFY_RECRUITERS"
+    GENERATE_INTERVIEW_PREP = "GENERATE_INTERVIEW_PREP"
+    CREATE_RECRUITER_TASK = "CREATE_RECRUITER_TASK"
+    TRIGGER_CALENDAR_SYNC = "TRIGGER_CALENDAR_SYNC"
+    GENERATE_ANALYTICS_EVENT = "GENERATE_ANALYTICS_EVENT"
+    REQUEST_HUMAN_APPROVAL = "REQUEST_HUMAN_APPROVAL"
+
+
+class WorkflowExecutionStatus(str, Enum):
+    PENDING = "PENDING"
+    RUNNING = "RUNNING"
+    WAITING_FOR_APPROVAL = "WAITING_FOR_APPROVAL"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+    EXPIRED = "EXPIRED"
+
+
+class WorkflowStepStatus(str, Enum):
+    PENDING = "PENDING"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    SKIPPED = "SKIPPED"
+    WAITING_APPROVAL = "WAITING_APPROVAL"
+
+
+class WorkflowApprovalStatus(str, Enum):
+    PENDING = "PENDING"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    EXPIRED = "EXPIRED"
+
+
+class RecruiterTaskStatus(str, Enum):
+    PENDING = "PENDING"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
+
+
+class RecruiterTaskPriority(str, Enum):
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    URGENT = "URGENT"
+
+
+# --- Phase 12: Predictive Intelligence & Workforce Planning Enums ---
+
+
+class ModelType(str, Enum):
+    TIME_TO_HIRE = "TIME_TO_HIRE"
+    HIRING_DEMAND = "HIRING_DEMAND"
+    STAGE_DURATION = "STAGE_DURATION"
+    CANDIDATE_DROP_OFF = "CANDIDATE_DROP_OFF"
+
+
+class PredictionAlgorithm(str, Enum):
+    RIDGE_REGRESSION = "RIDGE_REGRESSION"
+    RANDOM_FOREST = "RANDOM_FOREST"
+    EXPONENTIAL_SMOOTHING = "EXPONENTIAL_SMOOTHING"
+    BASELINE_EMPIRICAL = "BASELINE_EMPIRICAL"
+
+
+class ForecastType(str, Enum):
+    TIME_TO_HIRE = "TIME_TO_HIRE"
+    DEMAND_30D = "DEMAND_30D"
+    DEMAND_60D = "DEMAND_60D"
+    DEMAND_90D = "DEMAND_90D"
+    APPLICATION_VOLUME = "APPLICATION_VOLUME"
+
+
+class ConfidenceLevel(str, Enum):
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+    PRELIMINARY = "PRELIMINARY"
+
+
+class RecruitmentRiskType(str, Enum):
+    PIPELINE_DEFICIT = "PIPELINE_DEFICIT"
+    STAGE_STAGNATION = "STAGE_STAGNATION"
+    DROP_OFF_VULNERABILITY = "DROP_OFF_VULNERABILITY"
+    SCHEDULING_BOTTLENECK = "SCHEDULING_BOTTLENECK"
+    EXPENSE_OVERRUN = "EXPENSE_OVERRUN"
+
+
+class RiskSeverity(str, Enum):
+    CRITICAL = "CRITICAL"
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+
+
+class RiskStatus(str, Enum):
+    OPEN = "OPEN"
+    ACKNOWLEDGED = "ACKNOWLEDGED"
+    MITIGATED = "MITIGATED"
+    DISMISSED = "DISMISSED"
+
+
+class RecruiterUtilizationStatus(str, Enum):
+    OPTIMAL = "OPTIMAL"
+    OVERLOADED = "OVERLOADED"
+    UNDERUTILIZED = "UNDERUTILIZED"
+
+
+# --- Phase 13: Enterprise Security, Compliance & Governance Enums ---
+
+
+class AuditEventCategory(str, Enum):
+    AUTHENTICATION = "AUTHENTICATION"
+    AUTHORIZATION = "AUTHORIZATION"
+    DATA_ACCESS = "DATA_ACCESS"
+    DATA_EXPORT = "DATA_EXPORT"
+    ADMIN_ACTION = "ADMIN_ACTION"
+    SECURITY_EVENT = "SECURITY_EVENT"
+    PRIVACY_OP = "PRIVACY_OP"
+
+
+class AuditSeverity(str, Enum):
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+
+class ConsentType(str, Enum):
+    DATA_PROCESSING = "DATA_PROCESSING"
+    COMMUNICATION = "COMMUNICATION"
+    BACKGROUND_CHECK = "BACKGROUND_CHECK"
+    THIRD_PARTY_SHARING = "THIRD_PARTY_SHARING"
+
+
+class PrivacyRequestType(str, Enum):
+    DATA_ACCESS = "DATA_ACCESS"
+    DATA_CORRECTION = "DATA_CORRECTION"
+    DATA_DELETION = "DATA_DELETION"
+    RESTRICT_PROCESSING = "RESTRICT_PROCESSING"
+    CONSENT_WITHDRAWAL = "CONSENT_WITHDRAWAL"
+
+
+class PrivacyRequestStatus(str, Enum):
+    PENDING = "PENDING"
+    IN_REVIEW = "IN_REVIEW"
+    COMPLETED = "COMPLETED"
+    REJECTED = "REJECTED"
+    LEGAL_HOLD = "LEGAL_HOLD"
+
+
+class RetentionCategory(str, Enum):
+    CANDIDATE_RECORDS = "CANDIDATE_RECORDS"
+    RESUME_DOCUMENTS = "RESUME_DOCUMENTS"
+    INTERVIEW_RECORDS = "INTERVIEW_RECORDS"
+    NOTIFICATIONS = "NOTIFICATIONS"
+    AUDIT_LOGS = "AUDIT_LOGS"
+    AI_CONVERSATIONS = "AI_CONVERSATIONS"
+
+
+class RetentionAction(str, Enum):
+    ANONYMIZE = "ANONYMIZE"
+    ARCHIVE = "ARCHIVE"
+    DELETE = "DELETE"
+
+
+class RetentionExecutionType(str, Enum):
+    DRY_RUN = "DRY_RUN"
+    EXECUTE = "EXECUTE"
+
+
+class RetentionStatus(str, Enum):
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+
+
+# --- Phase 14: Enterprise SaaS Monetization, Subscription & Billing Enums ---
+
+
+class SubscriptionTier(str, Enum):
+    FREE = "FREE"
+    STARTER = "STARTER"
+    PROFESSIONAL = "PROFESSIONAL"
+    BUSINESS = "BUSINESS"
+    ENTERPRISE = "ENTERPRISE"
+
+
+class SubscriptionStatus(str, Enum):
+    ACTIVE = "ACTIVE"
+    TRIALING = "TRIALING"
+    PAST_DUE = "PAST_DUE"
+    CANCELED = "CANCELED"
+    EXPIRED = "EXPIRED"
+    INCOMPLETE = "INCOMPLETE"
+
+
+class BillingInterval(str, Enum):
+    MONTHLY = "MONTHLY"
+    ANNUAL = "ANNUAL"
+
+
+class PaymentGateway(str, Enum):
+    RAZORPAY = "RAZORPAY"
+    STRIPE = "STRIPE"
+    MOCK = "MOCK"
+
+
+class PaymentStatus(str, Enum):
+    PENDING = "PENDING"
+    SUCCEEDED = "SUCCEEDED"
+    FAILED = "FAILED"
+    REFUNDED = "REFUNDED"
+    PARTIALLY_REFUNDED = "PARTIALLY_REFUNDED"
+
+
+class InvoiceStatus(str, Enum):
+    DRAFT = "DRAFT"
+    ISSUED = "ISSUED"
+    PAID = "PAID"
+    VOID = "VOID"
+    UNCOLLECTIBLE = "UNCOLLECTIBLE"
+
+
+class QuotaResourceType(str, Enum):
+    ACTIVE_JOBS = "ACTIVE_JOBS"
+    RECRUITERS = "RECRUITERS"
+    CANDIDATES_MONTHLY = "CANDIDATES_MONTHLY"
+    RESUME_STORAGE_MB = "RESUME_STORAGE_MB"
+    AI_TOKENS_MONTHLY = "AI_TOKENS_MONTHLY"
+    INTERVIEWS_MONTHLY = "INTERVIEWS_MONTHLY"
+    WORKFLOW_RUNS_MONTHLY = "WORKFLOW_RUNS_MONTHLY"
+
+
+class BillingCurrency(str, Enum):
+    INR = "INR"
+    USD = "USD"
