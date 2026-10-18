@@ -16,6 +16,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { FileUploadResult, BulkUploadResponse } from "@/types";
+import { getApiBaseUrl } from "@/lib/api";
 
 interface SelectedFileItem {
   file: File;
@@ -109,7 +110,7 @@ export default function ResumeUploadPage() {
 
     // If single file, use single upload endpoint; if multiple, use bulk upload endpoint
     const token = localStorage.getItem("hirelens_access_token");
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+    const baseUrl = getApiBaseUrl();
 
     try {
       if (validPending.length === 1) {

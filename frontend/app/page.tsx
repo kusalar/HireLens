@@ -21,12 +21,13 @@ export default function HomePage() {
   }, [router]);
 
   const handleLaunchDemo = async () => {
+    if (demoLaunching) return;
     setDemoLaunching(true);
     try {
       const response: any = await apiClient("/auth/demo-session", {
         method: "POST",
       });
-      if (response.tokens?.access_token) {
+      if (response?.tokens?.access_token) {
         localStorage.setItem("hirelens_access_token", response.tokens.access_token);
         localStorage.setItem("hirelens_user", JSON.stringify(response.user));
         router.push("/dashboard");

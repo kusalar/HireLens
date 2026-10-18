@@ -15,6 +15,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
   const handleDemoAccess = async () => {
+    if (demoLoading || loading) return;
     setError(null);
     setDemoLoading(true);
     try {
@@ -22,13 +23,22 @@ export default function LoginPage() {
         method: "POST",
       });
 
-      if (response.tokens?.access_token) {
+      if (response?.tokens?.access_token) {
         localStorage.setItem("hirelens_access_token", response.tokens.access_token);
         localStorage.setItem("hirelens_user", JSON.stringify(response.user));
         router.push("/dashboard");
+      } else {
+        throw new Error("Demo session initialized but no access token was returned.");
       }
     } catch (err: any) {
-      setError(err.message || "Failed to initialize demo session. Please try again.");
+      const msg = err.message || "";
+      if (msg === "Not Found" || msg.includes("404")) {
+        setError("Demo session endpoint is unreachable. Please verify backend connection.");
+      } else if (msg.includes("429") || msg.toLowerCase().includes("too many")) {
+        setError("Too many demo login requests. Please wait a moment before trying again.");
+      } else {
+        setError(msg || "Failed to initialize demo session. Please try again.");
+      }
     } finally {
       setDemoLoading(false);
     }
@@ -36,6 +46,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading || demoLoading) return;
     setError(null);
     setLoading(true);
 
@@ -90,10 +101,13 @@ export default function LoginPage() {
             type="button"
             onClick={handleDemoAccess}
             disabled={demoLoading || loading}
-            className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-all disabled:opacity-50"
+            className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-all disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
           >
             {demoLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-blue-200" />
+                <span>Authenticating Demo Recruiter...</span>
+              </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4 text-blue-200" />

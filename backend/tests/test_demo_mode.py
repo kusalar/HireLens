@@ -89,6 +89,19 @@ def test_demo_session_endpoint(client: TestClient, demo_fixture):
     assert data["agency"]["slug"] == DEMO_AGENCY_SLUG
 
 
+def test_demo_session_endpoint_aliases(client: TestClient, demo_fixture):
+    """Verify root /auth/demo-session and /api/auth/demo-session aliases work seamlessly."""
+    # Test root alias: /auth/demo-session
+    r_root = client.post("/auth/demo-session")
+    assert r_root.status_code == 200
+    assert "access_token" in r_root.json()["tokens"]
+
+    # Test api alias: /api/auth/demo-session
+    r_api = client.post("/api/auth/demo-session")
+    assert r_api.status_code == 200
+    assert "access_token" in r_api.json()["tokens"]
+
+
 def test_demo_rate_limiting():
     """Verify rate limiter blocks excessive requests from same IP."""
     test_ip = "192.168.99.1"

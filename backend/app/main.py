@@ -36,6 +36,11 @@ app.add_middleware(
 # Mount API V1
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
+# Root-level router aliases for client resilience against missing /api/v1 prefix in API_URL
+from app.api.v1.endpoints import auth
+app.include_router(auth.router, prefix="/auth", tags=["Authentication (Root Alias)"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Authentication (API Alias)"])
+
 @app.get("/health", tags=["System"])
 def health_check():
     return {

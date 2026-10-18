@@ -20,7 +20,7 @@ import {
   Shield,
   Layers,
 } from "lucide-react";
-import { apiClient } from "@/lib/api";
+import { apiClient, buildApiUrl } from "@/lib/api";
 import { formatDateTime } from "@/lib/utils";
 import { ResumeDetailResponse, ResumeProcessingStatus } from "@/types";
 
@@ -64,7 +64,7 @@ export default function ResumeDetailPage() {
     if (!data) return;
     try {
       const token = localStorage.getItem("hirelens_access_token");
-      const url = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"}/resumes/${id}/download`;
+      const url = buildApiUrl(`/resumes/${id}/download`);
       const res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,

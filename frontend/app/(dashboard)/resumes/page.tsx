@@ -21,7 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { apiClient } from "@/lib/api";
+import { apiClient, buildApiUrl } from "@/lib/api";
 import { formatDateTime } from "@/lib/utils";
 import { Resume, ResumeProcessingStatus } from "@/types";
 
@@ -77,7 +77,7 @@ export default function ResumesPage() {
   const handleDownload = async (resumeId: string, filename: string) => {
     try {
       const token = localStorage.getItem("hirelens_access_token");
-      const url = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"}/resumes/${resumeId}/download`;
+      const url = buildApiUrl(`/resumes/${resumeId}/download`);
       const res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
