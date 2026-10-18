@@ -145,3 +145,17 @@ def require_platform_admin(current_user: User = Depends(get_current_user)) -> Us
             detail="Platform administrator privileges required.",
         )
     return current_user
+
+
+def require_non_demo_mutation(current_user: User = Depends(get_current_user)) -> User:
+    """
+    Dependency protecting core demonstration records.
+    Rejects destructive mutations (deletes, billing changes, team member removal)
+    for demo agency accounts with a 403 Forbidden explaining the restriction.
+    """
+    if getattr(current_user, "is_demo", False) or current_user.email == "recruiter@apex-demo.hirelens.ai":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Action restricted in Live Demo Mode. Core sample jobs, candidate profiles, and organization settings are protected.",
+        )
+    return current_user

@@ -29,4 +29,5 @@ class UserRead(BaseModel):
     role: UserRole
     is_active: bool
     is_verified: bool
+    is_demo: bool = False
     created_at: datetime

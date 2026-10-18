@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.api.deps import get_current_user
+from app.api.deps import get_current_user, require_non_demo_mutation
 from app.models.entities import User
 from app.models.enums import (
     UserRole,
@@ -131,6 +131,7 @@ def global_logout(
     data: Optional[RevokeSessionRequest] = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    _: User = Depends(require_non_demo_mutation),
 ):
     """
     Perform global logout, invalidating all active sessions and refresh tokens for user.

@@ -11,7 +11,28 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleDemoAccess = async () => {
+    setError(null);
+    setDemoLoading(true);
+    try {
+      const response: any = await apiClient("/auth/demo-session", {
+        method: "POST",
+      });
+
+      if (response.tokens?.access_token) {
+        localStorage.setItem("hirelens_access_token", response.tokens.access_token);
+        localStorage.setItem("hirelens_user", JSON.stringify(response.user));
+        router.push("/dashboard");
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to initialize demo session. Please try again.");
+    } finally {
+      setDemoLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +60,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100/60 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-sm border border-slate-200/80 p-8">
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-6">
           <div className="h-11 w-11 rounded-lg bg-slate-900 flex items-center justify-center text-white mb-3 shadow-inner">
             <Sparkles className="w-6 h-6 text-blue-400" />
           </div>
@@ -52,6 +73,44 @@ export default function LoginPage() {
             {error}
           </div>
         )}
+
+        {/* Live Demo 1-Click Entry for Evaluators */}
+        <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200/80 shadow-xs">
+          <div className="flex items-center justify-between mb-2">
+            <span className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[11px] font-semibold tracking-wide">
+              <Sparkles className="w-3 h-3 text-blue-600" />
+              <span>Dev Week 2 Challenge</span>
+            </span>
+            <span className="text-[11px] font-medium text-slate-500">No sign-up required</span>
+          </div>
+          <p className="text-xs text-slate-600 mb-3 leading-relaxed">
+            Explore live AI matching, synthetic candidates, and jobs as demo recruiter <strong>Alex Morgan</strong>.
+          </p>
+          <button
+            type="button"
+            onClick={handleDemoAccess}
+            disabled={demoLoading || loading}
+            className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-all disabled:opacity-50"
+          >
+            {demoLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4 text-blue-200" />
+                <span>Explore Live Demo (1-Click)</span>
+                <ArrowRight className="w-4 h-4 text-blue-200 ml-auto" />
+              </>
+            )}
+          </button>
+        </div>
+
+        <div className="relative flex items-center justify-center mb-5">
+          <div className="border-t border-slate-200 w-full"></div>
+          <span className="bg-white px-3 text-xs font-medium text-slate-400 uppercase tracking-wider">
+            or sign in with password
+          </span>
+          <div className="border-t border-slate-200 w-full"></div>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

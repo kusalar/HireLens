@@ -31,6 +31,39 @@ def login(data: UserLogin, request: Request, db: Session = Depends(get_db)):
         "tokens": tokens,
     }
 
+@router.post("/demo-session", status_code=status.HTTP_200_OK)
+def launch_demo_session(request: Request, db: Session = Depends(get_db)):
+    """
+    1-Click Live Demo Session Entry Point for Dev Week 2 Challenge Evaluators.
+    Issues a valid JWT token bound to the dedicated synthetic demo tenant (Apex Talent Partners).
+    Guarded with an IP-based sliding window rate limiter (max 15 req/min).
+    """
+    from fastapi import HTTPException
+    from app.services.demo_service import check_demo_rate_limit
+
+    ip_address = request.client.host if request.client else "127.0.0.1"
+    if not check_demo_rate_limit(ip_address, max_requests=15, window_seconds=60):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many demo session requests. Please wait a moment before trying again.",
+        )
+
+    user_agent = request.headers.get("user-agent")
+    auth_service = AuthService(db)
+    user, tokens, agency = auth_service.create_demo_session(
+        ip_address=ip_address, user_agent=user_agent
+    )
+    return {
+        "user": UserRead.model_validate(user),
+        "tokens": tokens,
+        "agency": {
+            "id": str(agency.id),
+            "name": agency.name,
+            "slug": agency.slug,
+            "is_demo": True,
+        },
+    }
+
 @router.post("/refresh", response_model=Token)
 def refresh_token(data: RefreshTokenRequest, db: Session = Depends(get_db)):
     auth_service = AuthService(db)

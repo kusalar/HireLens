@@ -24,7 +24,7 @@ from app.services.candidate_service import CandidateService
 from app.services.matching_service import MatchingService
 from app.schemas.matching import JobMatchResultRead
 from app.api.v1.endpoints.matching import serialize_result
-from app.api.deps import get_current_user, require_roles
+from app.api.deps import get_current_user, require_roles, require_non_demo_mutation
 
 
 router = APIRouter()
@@ -117,6 +117,7 @@ def delete_recruiter_note(
     candidate_id: uuid.UUID,
     note_id: uuid.UUID,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN, UserRole.RECRUITER)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = CandidateService(db, current_user.agency_id)
@@ -140,6 +141,7 @@ def delete_experience(
     candidate_id: uuid.UUID,
     exp_id: uuid.UUID,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN, UserRole.RECRUITER)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = CandidateService(db, current_user.agency_id)
@@ -161,6 +163,7 @@ def delete_education(
     candidate_id: uuid.UUID,
     edu_id: uuid.UUID,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN, UserRole.RECRUITER)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = CandidateService(db, current_user.agency_id)
@@ -182,6 +185,7 @@ def delete_skill(
     candidate_id: uuid.UUID,
     skill_id: uuid.UUID,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN, UserRole.RECRUITER)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = CandidateService(db, current_user.agency_id)

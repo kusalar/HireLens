@@ -16,7 +16,7 @@ from app.schemas.agency import (
 )
 from app.schemas.user import UserRead
 from app.services.agency_service import AgencyService
-from app.api.deps import get_current_user, require_roles, require_owner_or_admin
+from app.api.deps import get_current_user, require_roles, require_owner_or_admin, require_non_demo_mutation
 
 router = APIRouter()
 
@@ -40,6 +40,7 @@ def get_agency_profile(
 def update_agency_profile(
     data: AgencyUpdate,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = AgencyService(db, current_user.agency_id)
@@ -57,6 +58,7 @@ def list_team_members(
 def invite_member(
     data: AgencyInviteCreate,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = AgencyService(db, current_user.agency_id)
@@ -76,6 +78,7 @@ def update_member_role(
     user_id: uuid.UUID,
     new_role: UserRole,
     current_user: User = Depends(require_roles(UserRole.OWNER)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = AgencyService(db, current_user.agency_id)
@@ -86,6 +89,7 @@ def update_member_status(
     user_id: uuid.UUID,
     data: AgencyMemberUpdateStatus,
     current_user: User = Depends(require_owner_or_admin),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = AgencyService(db, current_user.agency_id)
@@ -103,6 +107,7 @@ def list_invitations(
 def revoke_invitation(
     invite_id: uuid.UUID,
     current_user: User = Depends(require_owner_or_admin),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = AgencyService(db, current_user.agency_id)

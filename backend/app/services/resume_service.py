@@ -584,6 +584,14 @@ class ResumeService:
                 detail="Resume not found or access denied.",
             )
 
+        # Self-heal ephemeral demo resume if missing from local container disk
+        if not self.storage.exists(resume.storage_key):
+            try:
+                from app.services.demo_service import self_heal_demo_resume
+                self_heal_demo_resume(self.db, resume)
+            except Exception as e:
+                print(f"[DEMO_SELF_HEAL_WARN] Could not self-heal demo resume: {e}")
+
         content = self.storage.get(resume.storage_key)
 
         self._record_audit(

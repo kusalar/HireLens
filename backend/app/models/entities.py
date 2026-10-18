@@ -21,6 +21,10 @@ class Agency(Base, TimestampMixin):
     invitations = relationship("AgencyInvitation", back_populates="agency", cascade="all, delete-orphan")
     audit_logs = relationship("AuditLog", back_populates="agency", cascade="all, delete-orphan")
 
+    @property
+    def is_demo(self) -> bool:
+        return self.slug == "apex-talent-partners-demo"
+
 
 class User(Base, TimestampMixin):
     __tablename__ = "users"
@@ -39,6 +43,10 @@ class User(Base, TimestampMixin):
     # Relationships
     agency = relationship("Agency", back_populates="users")
     audit_logs = relationship("AuditLog", back_populates="user")
+
+    @property
+    def is_demo(self) -> bool:
+        return self.email == "recruiter@apex-demo.hirelens.ai" or (bool(self.agency and self.agency.is_demo))
 
     __table_args__ = (
         Index("ix_users_agency_role", "agency_id", "role"),

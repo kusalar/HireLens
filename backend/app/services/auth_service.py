@@ -234,3 +234,84 @@ class AuthService:
             refresh_token=new_refresh,
             token_type="bearer",
         )
+
+    def create_demo_session(
+        self,
+        ip_address: Optional[str] = None,
+        user_agent: Optional[str] = None,
+    ) -> Tuple[User, Token, Agency]:
+        from app.services.demo_service import (
+            DEMO_USER_EMAIL,
+            DEMO_AGENCY_SLUG,
+            ensure_demo_resumes_in_storage,
+        )
+        from app.models.governance import UserSession, SecurityAuditEvent
+        from app.models.enums import AuditEventCategory, AuditSeverity
+        import hashlib
+        import json
+
+        user = self.user_repo.get_by_email(DEMO_USER_EMAIL)
+        if not user:
+            from app.db.seed_demo import seed_demo_data
+            seed_demo_data()
+            user = self.user_repo.get_by_email(DEMO_USER_EMAIL)
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Demo recruiter account could not be initialized.",
+                )
+
+        agency = self.agency_repo.get(user.agency_id)
+        if not agency or not agency.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Demo agency is currently unavailable.",
+            )
+
+        # 1. Create revocable server-side demo session
+        session = UserSession(
+            agency_id=user.agency_id,
+            user_id=user.id,
+            ip_address=ip_address,
+            user_agent=user_agent,
+            device_info="Demo Session (Judge/Visitor)",
+            is_active=True,
+        )
+        self.db.add(session)
+        self.db.flush()
+
+        # 2. Mint tokens bound to session
+        access_tok = create_access_token(user.id, session_id=session.id)
+        refresh_tok = create_refresh_token(user.id, session_id=session.id)
+        session.session_token_hash = hashlib.sha256(access_tok.encode("utf-8")).hexdigest()
+
+        # 3. Record audit event
+        event = SecurityAuditEvent(
+            agency_id=user.agency_id,
+            actor_user_id=user.id,
+            actor_email=user.email,
+            event_category=AuditEventCategory.AUTHENTICATION,
+            severity=AuditSeverity.LOW,
+            action="DEMO_SESSION_LAUNCHED",
+            resource_type="UserSession",
+            resource_id=str(session.id),
+            details_json=json.dumps({"demo_role": user.role.value, "origin": "1-click-evaluator"}),
+            ip_address=ip_address,
+            user_agent=user_agent,
+        )
+        self.db.add(event)
+        self.db.commit()
+
+        # 4. Ensure sample PDF resumes are persisted in local storage
+        try:
+            ensure_demo_resumes_in_storage(self.db, agency.id)
+        except Exception as e:
+            # Non-blocking resume restoration error logging
+            print(f"[DEMO_RESUME_WARN] Could not ensure demo resumes: {e}")
+
+        tokens = Token(
+            access_token=access_tok,
+            refresh_token=refresh_tok,
+            token_type="bearer",
+        )
+        return user, tokens, agency

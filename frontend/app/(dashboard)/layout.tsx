@@ -98,6 +98,8 @@ export default function DashboardLayout({
     router.push("/login");
   };
 
+  const isDemo = Boolean(user?.is_demo || agency?.is_demo || agency?.slug === "apex-talent-partners-demo");
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -133,8 +135,8 @@ export default function DashboardLayout({
           <div className="flex items-center space-x-2.5">
             <Building className="w-4 h-4 text-slate-400 shrink-0" />
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-white truncate">
-                {agency?.name || "My Agency"}
+              <p className="text-xs font-semibold text-white truncate flex items-center">
+                <span>{agency?.name || "My Agency"}</span>
               </p>
               <p className="text-[11px] text-slate-400 font-mono truncate">
                 /{agency?.slug}
@@ -178,11 +180,18 @@ export default function DashboardLayout({
         <div className="p-4 border-t border-slate-800 bg-slate-950/40">
           <div className="flex items-center justify-between">
             <div className="min-w-0 pr-2">
-              <p className="text-sm font-medium text-white truncate">{user?.full_name}</p>
+              <div className="flex items-center space-x-1.5">
+                <p className="text-sm font-medium text-white truncate">{user?.full_name}</p>
+                {isDemo && (
+                  <span className="text-[10px] font-mono uppercase bg-amber-500/30 text-amber-200 px-1.5 py-0.5 rounded border border-amber-400/40 font-bold shrink-0">
+                    DEMO
+                  </span>
+                )}
+              </div>
               <div className="flex items-center space-x-1.5 mt-0.5">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ${isDemo ? "bg-amber-400" : "bg-emerald-500"}`}></span>
                 <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
-                  {user?.role}
+                  {isDemo ? "Demo Recruiter" : user?.role}
                 </span>
               </div>
             </div>
@@ -210,12 +219,32 @@ export default function DashboardLayout({
             <div className="h-6 w-px bg-slate-200"></div>
             <div className="text-right">
               <span className="text-xs text-slate-500 block">Workspace Mode</span>
-              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                Tenant Isolated
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded border ${
+                isDemo
+                  ? "text-amber-800 bg-amber-50 border-amber-300"
+                  : "text-emerald-700 bg-emerald-50 border-emerald-200"
+              }`}>
+                {isDemo ? "✨ Live Demo Mode" : "Tenant Isolated"}
               </span>
             </div>
           </div>
         </header>
+
+        {/* Prominent Demo Mode Banner */}
+        {isDemo && (
+          <div className="bg-gradient-to-r from-amber-500/10 via-blue-500/5 to-amber-500/10 border-b border-amber-200/80 px-8 py-2.5 flex flex-wrap items-center justify-between text-xs text-slate-800">
+            <div className="flex items-center space-x-2">
+              <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <span className="font-semibold text-amber-900 uppercase tracking-wide">Live Demo Mode:</span>
+              <span className="text-slate-700">
+                Exploring <strong>Apex Talent Partners</strong> with synthetic candidates, jobs & deterministic AI scoring. Core sample records are write-protected.
+              </span>
+            </div>
+            <span className="hidden md:inline-flex items-center space-x-1 font-mono bg-white/90 text-amber-900 px-2.5 py-0.5 rounded text-[11px] font-semibold border border-amber-300 shadow-2xs">
+              <span>Dev Week 2 Evaluator Session</span>
+            </span>
+          </div>
+        )}
 
         <main className="flex-1 p-8 overflow-y-auto">
           {children}

@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Sparkles, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Loader2 } from "lucide-react";
+import { apiClient } from "@/lib/api";
 
 export default function HomePage() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
+  const [demoLaunching, setDemoLaunching] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("hirelens_access_token");
@@ -17,6 +19,26 @@ export default function HomePage() {
       setChecking(false);
     }
   }, [router]);
+
+  const handleLaunchDemo = async () => {
+    setDemoLaunching(true);
+    try {
+      const response: any = await apiClient("/auth/demo-session", {
+        method: "POST",
+      });
+      if (response.tokens?.access_token) {
+        localStorage.setItem("hirelens_access_token", response.tokens.access_token);
+        localStorage.setItem("hirelens_user", JSON.stringify(response.user));
+        router.push("/dashboard");
+      } else {
+        router.push("/login");
+      }
+    } catch (e) {
+      router.push("/login");
+    } finally {
+      setDemoLaunching(false);
+    }
+  };
 
   if (checking) {
     return null;
@@ -34,6 +56,21 @@ export default function HomePage() {
         </div>
 
         <div className="flex items-center space-x-3">
+          <button
+            type="button"
+            onClick={handleLaunchDemo}
+            disabled={demoLaunching}
+            className="text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/80 px-3 py-1.5 rounded-md flex items-center space-x-1.5 transition-colors"
+          >
+            {demoLaunching ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <>
+                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <span>Live Demo</span>
+              </>
+            )}
+          </button>
           <Link
             href="/login"
             className="text-sm font-medium text-slate-700 hover:text-slate-900 px-3 py-2 rounded-md transition-colors"
@@ -66,6 +103,21 @@ export default function HomePage() {
         </p>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
+          <button
+            type="button"
+            onClick={handleLaunchDemo}
+            disabled={demoLaunching}
+            className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm flex items-center space-x-2 shadow-sm transition-all disabled:opacity-50"
+          >
+            {demoLaunching ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4 text-blue-200" />
+                <span>Explore Live Demo (1-Click)</span>
+              </>
+            )}
+          </button>
           <Link
             href="/register"
             className="px-6 py-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm flex items-center space-x-2 shadow-sm transition-all"

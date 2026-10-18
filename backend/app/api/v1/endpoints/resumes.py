@@ -15,7 +15,7 @@ import io
 
 from sqlalchemy.orm import Session
 from app.db.session import get_db
-from app.api.deps import get_current_user, require_roles
+from app.api.deps import get_current_user, require_roles, require_non_demo_mutation
 from app.models.entities import User
 from app.models.enums import UserRole, ResumeProcessingStatus
 from app.services.resume_service import ResumeService
@@ -200,6 +200,7 @@ def delete_resume(
     resume_id: uuid.UUID,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_roles(*MUTATION_ROLES)),
+    _: User = Depends(require_non_demo_mutation),
 ):
     service = ResumeService(db, current_user.agency_id)
     service.delete_resume(resume_id, current_user)

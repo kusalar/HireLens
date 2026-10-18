@@ -24,7 +24,7 @@ from app.schemas.matching import (
     MatchEvidenceRead,
 )
 from app.api.v1.endpoints.matching import serialize_result
-from app.api.deps import get_current_user, require_roles
+from app.api.deps import get_current_user, require_roles, require_non_demo_mutation
 
 
 router = APIRouter()
@@ -80,6 +80,7 @@ def update_job(
 def delete_job(
     job_id: uuid.UUID,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN, UserRole.RECRUITER)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = JobService(db, current_user.agency_id)
@@ -90,6 +91,7 @@ def delete_job(
 def archive_job(
     job_id: uuid.UUID,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN, UserRole.RECRUITER)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = JobService(db, current_user.agency_id)
@@ -121,6 +123,7 @@ def delete_job_requirement(
     job_id: uuid.UUID,
     requirement_id: uuid.UUID,
     current_user: User = Depends(require_roles(UserRole.OWNER, UserRole.ADMIN, UserRole.RECRUITER)),
+    _: User = Depends(require_non_demo_mutation),
     db: Session = Depends(get_db),
 ):
     service = JobService(db, current_user.agency_id)

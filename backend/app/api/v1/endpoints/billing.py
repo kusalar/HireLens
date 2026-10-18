@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.entities import User
 from app.models.enums import PaymentGateway
-from app.api.deps import get_current_user, require_owner_or_admin, require_platform_admin
+from app.api.deps import get_current_user, require_owner_or_admin, require_platform_admin, require_non_demo_mutation
 from app.schemas.billing import (
     SubscriptionPlanRead,
     AgencySubscriptionRead,
@@ -61,6 +61,7 @@ def cancel_subscription(
     cancel_at_period_end: bool = True,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    _: User = Depends(require_non_demo_mutation),
 ):
     """
     Schedule subscription cancellation at the end of the billing period. OWNER/ADMIN only.
@@ -90,6 +91,7 @@ def create_checkout_session(
     data: CheckoutSessionCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    _: User = Depends(require_non_demo_mutation),
 ):
     """
     Initiates a secure checkout session with Razorpay, Stripe, or Mock provider. OWNER/ADMIN only.
@@ -104,6 +106,7 @@ def verify_payment(
     data: PaymentVerificationRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    _: User = Depends(require_non_demo_mutation),
 ):
     """
     Verifies cryptographic gateway signature and activates the upgraded subscription. OWNER/ADMIN only.
@@ -224,6 +227,7 @@ def update_billing_profile(
     data: AgencyBillingProfileUpdate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    _: User = Depends(require_non_demo_mutation),
 ):
     """
     Updates the agency's legal entity name, address, and GSTIN. OWNER/ADMIN only.

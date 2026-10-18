@@ -24,6 +24,7 @@ class AgencyRead(AgencyBase):
     id: uuid.UUID
     slug: str
     is_active: bool
+    is_demo: bool = False
     created_at: datetime
 
 class AgencyInviteCreate(BaseModel):
