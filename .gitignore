@@ -70,3 +70,7 @@ Thumbs.db
 .vscode/
 *.sublime-project
 *.sublime-workspace
+
+# Documentation & Audit Reports (Local only; exclude from GitHub repository)
+*.md
+!README.md
