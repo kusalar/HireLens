@@ -13,6 +13,7 @@ SAFETY DIRECTIVES:
 import os
 import sys
 import uuid
+import json
 from decimal import Decimal
 from datetime import datetime, timezone, timedelta
 
@@ -120,7 +121,7 @@ def seed_demo_data():
         job1 = Job(
             id=uuid.uuid4(),
             agency_id=agency.id,
-            creator_id=user.id,
+            created_by=user.id,
             title="Senior Full-Stack Engineer",
             department="Engineering",
             description=(
@@ -143,7 +144,7 @@ def seed_demo_data():
             JobRequirement(
                 id=uuid.uuid4(),
                 job_id=job1.id,
-                requirement_type=RequirementType.MUST_HAVE,
+                requirement_type=RequirementType.SKILL,
                 requirement_text="Proficiency with Python, FastAPI, and asynchronous backend microservices",
                 importance_weight=1.5,
                 is_mandatory=True,
@@ -151,7 +152,7 @@ def seed_demo_data():
             JobRequirement(
                 id=uuid.uuid4(),
                 job_id=job1.id,
-                requirement_type=RequirementType.MUST_HAVE,
+                requirement_type=RequirementType.SKILL,
                 requirement_text="Strong production experience with React, Next.js, and TypeScript",
                 importance_weight=1.2,
                 is_mandatory=True,
@@ -159,7 +160,7 @@ def seed_demo_data():
             JobRequirement(
                 id=uuid.uuid4(),
                 job_id=job1.id,
-                requirement_type=RequirementType.NICE_TO_HAVE,
+                requirement_type=RequirementType.EXPERIENCE,
                 requirement_text="Relational database optimization, PostgreSQL advisory locks, and index tuning",
                 importance_weight=1.0,
                 is_mandatory=False,
@@ -167,7 +168,7 @@ def seed_demo_data():
             JobRequirement(
                 id=uuid.uuid4(),
                 job_id=job1.id,
-                requirement_type=RequirementType.NICE_TO_HAVE,
+                requirement_type=RequirementType.SKILL,
                 requirement_text="Docker containerization, CI/CD pipelines, and cloud deployment",
                 importance_weight=0.8,
                 is_mandatory=False,
@@ -179,7 +180,7 @@ def seed_demo_data():
         job2 = Job(
             id=uuid.uuid4(),
             agency_id=agency.id,
-            creator_id=user.id,
+            created_by=user.id,
             title="AI/ML Platform Engineer",
             department="Data & AI",
             description=(
@@ -202,52 +203,52 @@ def seed_demo_data():
         c1 = Candidate(
             id=uuid.uuid4(),
             agency_id=agency.id,
-            full_name="Aarav Sharma [Synthetic]",
-            email="aarav.sharma.demo@example.com",
-            phone="+919876543210",
+            full_name="Elena Rostova [Synthetic]",
+            email="elena.rostova.demo@example.com",
+            phone_encrypted="+919876543210",
             current_location="Bengaluru, India",
-            current_title="Lead Full-Stack Developer",
+            current_title="Senior Full-Stack Specialist",
             total_experience_months=72,
-            profile_status=CandidateProfileStatus.CONFIRMED,
+            profile_status=CandidateProfileStatus.ACTIVE,
             created_at=now - timedelta(days=4),
             updated_at=now - timedelta(days=4),
         )
         c2 = Candidate(
             id=uuid.uuid4(),
             agency_id=agency.id,
-            full_name="Priya Nair [Synthetic]",
-            email="priya.nair.demo@example.com",
-            phone="+919876543211",
+            full_name="Marcus Vance [Synthetic]",
+            email="marcus.vance.demo@example.com",
+            phone_encrypted="+919876543211",
             current_location="Mumbai, India",
-            current_title="Senior Python Backend Specialist",
+            current_title="Lead Machine Learning Engineer",
             total_experience_months=60,
-            profile_status=CandidateProfileStatus.CONFIRMED,
+            profile_status=CandidateProfileStatus.ACTIVE,
             created_at=now - timedelta(days=4),
             updated_at=now - timedelta(days=4),
         )
         c3 = Candidate(
             id=uuid.uuid4(),
             agency_id=agency.id,
-            full_name="Marcus Vance [Synthetic]",
-            email="marcus.vance.demo@example.com",
-            phone="+14155552671",
+            full_name="Priya Sharma [Synthetic]",
+            email="priya.sharma.demo@example.com",
+            phone_encrypted="+14155552671",
             current_location="San Francisco, USA",
-            current_title="AI Research & ML Engineer",
+            current_title="Full-Stack Developer",
             total_experience_months=48,
-            profile_status=CandidateProfileStatus.CONFIRMED,
+            profile_status=CandidateProfileStatus.ACTIVE,
             created_at=now - timedelta(days=3),
             updated_at=now - timedelta(days=3),
         )
         c4 = Candidate(
             id=uuid.uuid4(),
             agency_id=agency.id,
-            full_name="Elena Rostova [Synthetic]",
-            email="elena.rostova.demo@example.com",
-            phone="+442079460912",
+            full_name="David Kim [Synthetic]",
+            email="david.kim.demo@example.com",
+            phone_encrypted="+442079460912",
             current_location="London, UK",
-            current_title="Junior Frontend Engineer",
-            total_experience_months=18,
-            profile_status=CandidateProfileStatus.CONFIRMED,
+            current_title="Data Scientist",
+            total_experience_months=36,
+            profile_status=CandidateProfileStatus.ACTIVE,
             created_at=now - timedelta(days=2),
             updated_at=now - timedelta(days=2),
         )
@@ -257,12 +258,12 @@ def seed_demo_data():
 
         # Add Skills for Candidate 1 (Strong Match for Job 1)
         skills_c1 = [
-            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="Python", proficiency="EXPERT", years_of_experience=6.0),
-            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="FastAPI", proficiency="EXPERT", years_of_experience=4.0),
-            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="React", proficiency="ADVANCED", years_of_experience=5.0),
-            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="TypeScript", proficiency="ADVANCED", years_of_experience=4.0),
-            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="PostgreSQL", proficiency="EXPERT", years_of_experience=6.0),
-            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="Docker", proficiency="INTERMEDIATE", years_of_experience=3.0),
+            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="Python", normalized_skill="python", proficiency="EXPERT"),
+            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="FastAPI", normalized_skill="fastapi", proficiency="EXPERT"),
+            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="React", normalized_skill="react", proficiency="ADVANCED"),
+            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="TypeScript", normalized_skill="typescript", proficiency="ADVANCED"),
+            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="PostgreSQL", normalized_skill="postgresql", proficiency="EXPERT"),
+            CandidateSkill(id=uuid.uuid4(), candidate_id=c1.id, skill_name="Docker", normalized_skill="docker", proficiency="INTERMEDIATE"),
         ]
         for s in skills_c1:
             db.add(s)
@@ -315,38 +316,44 @@ def seed_demo_data():
             id=uuid.uuid4(),
             agency_id=agency.id,
             job_id=job1.id,
-            triggered_by_user_id=user.id,
+            initiated_by=user.id,
             status=JobMatchRunStatus.COMPLETED,
-            total_candidates_evaluated=3,
+            candidate_count=4,
+            completed_count=4,
+            failed_count=0,
+            started_at=now - timedelta(days=1),
             completed_at=now - timedelta(days=1),
             created_at=now - timedelta(days=1),
         )
         db.add(run1)
         db.flush()
 
-        # Match Result for Aarav Sharma (Score: 92.4%)
+        # Match Result for Elena Rostova (Score: 92.4%)
         res1 = JobMatchResult(
             id=uuid.uuid4(),
-            match_run_id=run1.id,
+            agency_id=agency.id,
+            job_id=job1.id,
             candidate_id=c1.id,
-            overall_score=Decimal("92.40"),
-            skill_score=Decimal("95.00"),
-            experience_score=Decimal("90.00"),
-            title_score=Decimal("90.00"),
-            ai_explanation_json={
-                "summary": "Candidate demonstrates outstanding evidence alignment (92.4/100) with key requirements for Senior Full-Stack Engineer.",
-                "strengths": [
-                    "Demonstrated Python & FastAPI: 6 years production microservices experience.",
-                    "Demonstrated React & TypeScript: 5 years enterprise frontend architecture.",
-                    "Demonstrated PostgreSQL: deep query optimization and transactional locking experience.",
-                ],
-                "skill_gaps": ["Kubernetes orchestration mentioned only in basic context."],
-                "verification_items": ["Discuss recent high-concurrency database isolation designs."],
-                "suggested_interview_questions": [
-                    "How do you implement PostgreSQL advisory locks to prevent concurrent race conditions?",
-                    "Describe your approach to state management in large Next.js applications.",
-                ],
-            },
+            match_run_id=run1.id,
+            overall_score=92.4,
+            required_skills_score=95.0,
+            experience_score=90.0,
+            preferred_skills_score=85.0,
+            matched_requirements_count=4,
+            explanation="Candidate demonstrates outstanding evidence alignment (92.4/100) with key requirements for Senior Full-Stack Engineer.",
+            strengths=json.dumps([
+                "Demonstrated Python & FastAPI: 6 years production microservices experience.",
+                "Demonstrated React & TypeScript: 5 years enterprise frontend architecture.",
+                "Demonstrated PostgreSQL: deep query optimization and transactional locking experience.",
+            ]),
+            skill_gaps=json.dumps(["Kubernetes orchestration mentioned only in basic context."]),
+            verification_items=json.dumps(["Discuss recent high-concurrency database isolation designs."]),
+            suggested_questions=json.dumps([
+                "How do you implement PostgreSQL advisory locks to prevent concurrent race conditions?",
+                "Describe your approach to state management in large Next.js applications.",
+            ]),
+            status="COMPLETED",
+            scoring_version="v1.0",
             created_at=now - timedelta(days=1),
             updated_at=now - timedelta(days=1),
         )
@@ -358,18 +365,20 @@ def seed_demo_data():
             db.add(
                 MatchEvidence(
                     id=uuid.uuid4(),
+                    agency_id=agency.id,
                     match_result_id=res1.id,
                     job_requirement_id=r.id,
-                    candidate_id=c1.id,
                     criterion_name=r.requirement_text[:50],
-                    criterion_type=r.requirement_type.value,
+                    criterion_type="REQUIRED_SKILL" if r.is_mandatory else "PREFERRED_SKILL",
                     expected_requirement=r.requirement_text,
                     candidate_evidence="Verified 6 years direct enterprise experience from candidate profile",
                     source_excerpt="Built distributed FastAPI & React platforms with PostgreSQL.",
                     source_page=1,
                     semantic_similarity=0.95,
+                    score_contribution=25.0,
                     evidence_status=MatchStatus.DEMONSTRATED,
                     verification_status=VerificationStatus.VERIFIED,
+                    created_at=now - timedelta(days=1),
                 )
             )
 

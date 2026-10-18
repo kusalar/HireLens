@@ -167,9 +167,16 @@ class EntitlementService:
         self.db = db
         self.agency_id = agency_id
 
-    def ensure_default_plans(self) -> List[SubscriptionPlan]:
+    def ensure_default_plans(self_or_db, db_arg: Optional[Session] = None) -> List[SubscriptionPlan]:
         """Ensures the 5 canonical subscription plans exist in the catalog."""
-        plans = self.db.scalars(select(SubscriptionPlan)).all()
+        if db_arg is not None:
+            db = db_arg
+        elif hasattr(self_or_db, "db"):
+            db = self_or_db.db
+        else:
+            db = self_or_db
+
+        plans = db.scalars(select(SubscriptionPlan)).all()
         if not plans:
             created = []
             for item in DEFAULT_PLANS_DATA:
@@ -190,9 +197,9 @@ class EntitlementService:
                     features_json=json.dumps(item["features"]),
                     is_active=True,
                 )
-                self.db.add(plan)
+                db.add(plan)
                 created.append(plan)
-            self.db.commit()
+            db.commit()
             return created
         return list(plans)
 
