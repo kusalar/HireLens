@@ -35,14 +35,14 @@ Create or update your `.env` file in `d:\HireLens\backend\.env`:
 # =====================================================================
 
 # --- Razorpay (Domestic India / INR) ---
-RAZORPAY_KEY_ID="rzp_test_YourTestKeyIdHere"
-RAZORPAY_KEY_SECRET="YourTestKeySecretHere"
-RAZORPAY_WEBHOOK_SECRET="YourRazorpayWebhookSecretHere"
+RAZORPAY_KEY_ID="<YOUR_RAZORPAY_KEY_ID>"
+RAZORPAY_KEY_SECRET="<YOUR_RAZORPAY_KEY_SECRET>"
+RAZORPAY_WEBHOOK_SECRET="<YOUR_RAZORPAY_WEBHOOK_SECRET>"
 
 # --- Stripe (International / USD) ---
-STRIPE_PUBLISHABLE_KEY="pk_test_YourStripePublishableKeyHere"
-STRIPE_SECRET_KEY="sk_test_YourStripeSecretKeyHere"
-STRIPE_WEBHOOK_SECRET="whsec_YourStripeWebhookSecretHere"
+STRIPE_PUBLISHABLE_KEY="<YOUR_STRIPE_PUBLISHABLE_KEY>"
+STRIPE_SECRET_KEY="<YOUR_STRIPE_SECRET_KEY>"
+STRIPE_WEBHOOK_SECRET="<YOUR_STRIPE_WEBHOOK_SIGNING_SECRET>"
 
 # --- Currency & Tax Defaults ---
 DEFAULT_BILLING_CURRENCY="INR"
@@ -94,7 +94,7 @@ PLATFORM_GSTIN="29AAAAA0000A1Z5"
 1. Sign up or log into the [Stripe Dashboard](https://dashboard.stripe.com/).
 2. Ensure **Test mode** toggle is activated.
 3. Navigate to **Developers &rarr; API keys**.
-4. Copy the **Publishable key** (`pk_test_...`) and **Secret key** (`sk_test_...`) into your environment variables.
+4. Copy the **Publishable key** and **Secret key** into your environment variables.
 
 ### 4.2 Webhook Configuration
 1. Go to **Developers &rarr; Webhooks**.
@@ -111,7 +111,7 @@ PLATFORM_GSTIN="29AAAAA0000A1Z5"
    - `customer.subscription.deleted`
    - `charge.refunded`
 5. Click **Add endpoint**.
-6. Reveal the **Signing secret** (`whsec_...`) and paste into `STRIPE_WEBHOOK_SECRET`.
+6. Reveal the **Signing secret** and paste into `STRIPE_WEBHOOK_SECRET`.
 
 ---
 

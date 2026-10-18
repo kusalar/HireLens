@@ -70,10 +70,10 @@ Configure these variables in the **Render Dashboard** under **Web Service > Envi
 
 | Variable Name | Required | Is Secret? | Demo Recommendation | Description & Fallback |
 |---|---|---|---|---|
-| `RAZORPAY_KEY_ID` | Optional | **NO** | `rzp_test_placeholder_key` | Public test key. Application operates in mock payment mode if dummy keys are supplied. |
-| `RAZORPAY_KEY_SECRET` | Optional | **YES** | `dummy_secret_for_demo` | Secret test key for HMAC verification. |
-| `STRIPE_API_KEY` | Optional | **YES** | `sk_test_placeholder_key` | Stripe secret key. Disabled or test mode. |
-| `STRIPE_WEBHOOK_SECRET` | Optional | **YES** | `whsec_dummy_secret` | Webhook signing key. |
+| `RAZORPAY_KEY_ID` | Optional | **NO** | `dummy_rzp_key_id` | Public test key. Application operates in mock payment mode if dummy keys are supplied. |
+| `RAZORPAY_KEY_SECRET` | Optional | **YES** | `dummy_rzp_secret` | Secret test key for HMAC verification. |
+| `STRIPE_API_KEY` | Optional | **YES** | `dummy_stripe_key` | Stripe secret key. Disabled or test mode. |
+| `STRIPE_WEBHOOK_SECRET` | Optional | **YES** | `dummy_stripe_webhook_secret` | Webhook signing key. |
 
 > [!NOTE]
 > For the Dev Week 2 evaluation, payment billing is fully configured with simulated webhook event handlers and mock order generators. No live charges will occur.
@@ -149,8 +149,8 @@ FALLBACK_RULE_ENGINE_ACTIVE=True
 # GEMINI_API_KEY=AIzaSy...
 
 # --- Mock Gateways (No Live Charges) ---
-RAZORPAY_KEY_ID=rzp_test_demo_placeholder
-RAZORPAY_KEY_SECRET=rzp_secret_demo_placeholder
+RAZORPAY_KEY_ID=mock_rzp_key_placeholder
+RAZORPAY_KEY_SECRET=mock_rzp_secret_placeholder
 EMAILS_FROM_EMAIL=demo@hirelens.ai
 EMAILS_FROM_NAME=HireLens AI Demo
 ```

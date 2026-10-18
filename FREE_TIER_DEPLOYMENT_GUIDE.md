@@ -93,7 +93,7 @@ This deployment architecture provides an enterprise-grade demonstration of HireL
    - `STORAGE_BACKEND`: `local`
    - `UPLOAD_DIR`: `./uploads`
    - `FALLBACK_RULE_ENGINE_ACTIVE`: `True`
-   - `RAZORPAY_KEY_ID`: `rzp_test_placeholder`
+   - `RAZORPAY_KEY_ID`: `mock_rzp_key_placeholder`
    - `RAZORPAY_KEY_SECRET`: `dummy_secret`
 7. Click **Create Web Service**.
 8. Render will build and deploy the container. Once completed, your public URL will be displayed (e.g., `https://hirelens-api.onrender.com`).

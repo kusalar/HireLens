@@ -65,10 +65,10 @@ Configure these in the **Render Dashboard** under **Web Service > Environment**.
 
 | Variable Name | Required | Is Secret? | ₹0 Demo Value | Technical Purpose & Fallback |
 |---|---|---|---|---|
-| `RAZORPAY_KEY_ID` | Optional | **NO** | `rzp_test_placeholder_key` | Public test identifier. Operates in mock checkout mode. |
-| `RAZORPAY_KEY_SECRET` | Optional | **YES** | `rzp_test_placeholder_secret` | Mock signature validation. No live payments processed. |
-| `STRIPE_PUBLISHABLE_KEY` | Optional | **NO** | `pk_test_placeholder_key` | Disabled or test simulation mode. |
-| `STRIPE_SECRET_KEY` | Optional | **YES** | `sk_test_placeholder_secret` | Disabled or test simulation mode. |
+| `RAZORPAY_KEY_ID` | Optional | **NO** | `mock_rzp_key_placeholder` | Public test identifier. Operates in mock checkout mode. |
+| `RAZORPAY_KEY_SECRET` | Optional | **YES** | `mock_rzp_secret_placeholder` | Mock signature validation. No live payments processed. |
+| `STRIPE_PUBLISHABLE_KEY` | Optional | **NO** | `mock_stripe_pk_placeholder` | Disabled or test simulation mode. |
+| `STRIPE_SECRET_KEY` | Optional | **YES** | `mock_stripe_sk_placeholder` | Disabled or test simulation mode. |
 
 ### 3.5 Email & Communications (Console Mock Logging)
 
@@ -102,7 +102,7 @@ STORAGE_BACKEND=local
 UPLOAD_DIR=./uploads
 
 # Mock Integrations
-RAZORPAY_KEY_ID=rzp_test_placeholder
+RAZORPAY_KEY_ID=mock_rzp_key_placeholder
 RAZORPAY_KEY_SECRET=dummy_secret_for_demo
 EMAIL_PROVIDER=console
 EMAILS_FROM_EMAIL=noreply@hirelens.ai

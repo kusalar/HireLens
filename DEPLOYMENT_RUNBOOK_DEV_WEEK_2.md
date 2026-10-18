@@ -80,7 +80,7 @@ Before beginning deployment, ensure you have:
    - `STORAGE_BACKEND`: `local`
    - `UPLOAD_DIR`: `./uploads`
    - `FALLBACK_RULE_ENGINE_ACTIVE`: `True`
-   - `RAZORPAY_KEY_ID`: `rzp_test_placeholder`
+   - `RAZORPAY_KEY_ID`: `mock_rzp_key_placeholder`
    - `RAZORPAY_KEY_SECRET`: `dummy_secret`
 6. Click **Create Web Service**.
 7. Wait for the initial deployment to complete. Render will assign a public HTTPS URL (e.g., `https://hirelens-api.onrender.com`). Note this URL down.

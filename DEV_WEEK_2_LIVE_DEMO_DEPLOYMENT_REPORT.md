@@ -109,7 +109,7 @@ UPLOAD_DIR=./uploads
 FALLBACK_RULE_ENGINE_ACTIVE=True
 
 # Mock Integrations
-RAZORPAY_KEY_ID=rzp_test_placeholder
+RAZORPAY_KEY_ID=mock_rzp_key_placeholder
 RAZORPAY_KEY_SECRET=dummy_secret_for_demo
 EMAIL_PROVIDER=console
 EMAILS_FROM_EMAIL=noreply@hirelens.ai

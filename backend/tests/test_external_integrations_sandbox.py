@@ -111,7 +111,7 @@ def test_razorpay_unconfigured_credentials_rejection():
                 plan_slug="starter",
                 amount=4999.0,
                 currency=BillingCurrency.INR,
-                idempotency_key="idemp_rzp_test_1",
+                idempotency_key="idemp_rzp_sandbox_1",
             )
         assert "503" in str(exc_info.value)
         assert "Razorpay payment gateway is not configured with live credentials" in str(exc_info.value)
@@ -122,8 +122,8 @@ def test_razorpay_sandbox_checkout_order_creation():
     Verifies Razorpay sandbox order payload generation with INR currency and test publishable key.
     """
     adapter = RazorpayAdapter()
-    adapter.key_id = "rzp_test_mock_sandbox_key_99"
-    adapter.key_secret = "rzp_test_mock_secret_88"
+    adapter.key_id = "mock_rzp_sandbox_key_99"
+    adapter.key_secret = "mock_rzp_secret_88"
     adapter.is_live = True
 
     session = adapter.create_checkout_session(
@@ -137,7 +137,7 @@ def test_razorpay_sandbox_checkout_order_creation():
     assert session["gateway"] == PaymentGateway.RAZORPAY
     assert session["amount"] == 14999.0
     assert session["currency"] == BillingCurrency.INR
-    assert session["publishable_key"] == "rzp_test_mock_sandbox_key_99"
+    assert session["publishable_key"] == "mock_rzp_sandbox_key_99"
     assert session["order_id"].startswith("order_rzp_")
     assert "https://api.razorpay.com/v1/checkout/" in session["checkout_url"]
 
@@ -148,12 +148,12 @@ def test_razorpay_signature_verification_and_forgery_rejection():
     and confirms rejection of forged signatures.
     """
     adapter = RazorpayAdapter()
-    adapter.key_id = "rzp_test_mock_sandbox_key_99"
-    adapter.key_secret = "rzp_test_mock_secret_88"
+    adapter.key_id = "mock_rzp_sandbox_key_99"
+    adapter.key_secret = "mock_rzp_secret_88"
     adapter.is_live = True
 
-    order_id = "order_rzp_test_order_12345"
-    payment_id = "pay_rzp_test_payment_67890"
+    order_id = "order_mock_test_order_12345"
+    payment_id = "pay_mock_test_payment_67890"
 
     # 1. Compute valid signature
     msg = f"{order_id}|{payment_id}".encode("utf-8")
@@ -188,7 +188,7 @@ def test_razorpay_webhook_signature_and_deduplication(client: TestClient, db_ses
     Verifies Razorpay webhook HMAC-SHA256 signature verification via X-Razorpay-Signature header
     and verifies replay/deduplication protection.
     """
-    webhook_secret = "rzp_whsec_test_secret_7777"
+    webhook_secret = "mock_rzp_webhook_secret_7777"
     with patch.object(settings, "RAZORPAY_WEBHOOK_SECRET", webhook_secret), \
          patch.dict(os.environ, {"RAZORPAY_WEBHOOK_SECRET": webhook_secret}):
         event_id = f"evt_rzp_{uuid.uuid4().hex[:14]}"
@@ -275,8 +275,8 @@ def test_stripe_sandbox_checkout_session_creation():
     Verifies Stripe sandbox session generation with USD currency and publishable key.
     """
     adapter = StripeAdapter()
-    adapter.secret_key = "sk_test_mock_sandbox_secret_key"
-    adapter.publishable_key = "pk_test_mock_sandbox_pub_key"
+    adapter.secret_key = "mock_stripe_sandbox_secret_key"
+    adapter.publishable_key = "mock_stripe_sandbox_pub_key"
     adapter.is_live = True
 
     session = adapter.create_checkout_session(
@@ -290,7 +290,7 @@ def test_stripe_sandbox_checkout_session_creation():
     assert session["gateway"] == PaymentGateway.STRIPE
     assert session["amount"] == 199.0
     assert session["currency"] == BillingCurrency.USD
-    assert session["publishable_key"] == "pk_test_mock_sandbox_pub_key"
+    assert session["publishable_key"] == "mock_stripe_sandbox_pub_key"
     assert session["session_id"].startswith("cs_test_")
     assert "https://checkout.stripe.com/pay/" in session["checkout_url"]
 
@@ -300,7 +300,7 @@ def test_stripe_webhook_signature_format_and_deduplication(client: TestClient, d
     Verifies Stripe webhook signature verification using 't=timestamp,v1=signature' format
     and verifies deduplication handling.
     """
-    webhook_secret = "whsec_test_stripe_secret_key_8888"
+    webhook_secret = "mock_stripe_webhook_secret_8888"
     with patch.object(settings, "STRIPE_WEBHOOK_SECRET", webhook_secret), \
          patch.dict(os.environ, {"STRIPE_WEBHOOK_SECRET": webhook_secret}):
         event_id = f"evt_str_{uuid.uuid4().hex[:14]}"
@@ -447,8 +447,8 @@ def test_google_calendar_token_encryption_at_rest(client: TestClient, db_session
     agency_id = uuid.UUID(agency_id_str)
     user_id = uuid.UUID(user_id_str)
 
-    raw_access_token = "ya29.a0AfH6SMTestGoogleAccessToken123456789"
-    raw_refresh_token = "1//04TestGoogleRefreshTokenSecureValue98765"
+    raw_access_token = "mock_google_access_token_123456789"
+    raw_refresh_token = "mock_google_refresh_token_98765"
 
     conn = CalendarConnection(
         agency_id=agency_id,
@@ -468,7 +468,7 @@ def test_google_calendar_token_encryption_at_rest(client: TestClient, db_session
 
     # 1. Confirm DB field is NOT plaintext
     assert conn.encrypted_access_token != raw_access_token
-    assert not conn.encrypted_access_token.startswith("ya29.")
+    assert not conn.encrypted_access_token.startswith("mock_google_")
     assert conn.encrypted_refresh_token != raw_refresh_token
 
     # 2. Confirm decryption produces original plaintext
@@ -684,8 +684,8 @@ def test_structured_log_formatter_redacts_credentials():
         args=(),
         exc_info=None,
     )
-    record.api_key = "sk_live_secret_key_12345"
-    record.token = "ya29.secret_token_value_67890"
+    record.api_key = "mock_secret_api_key_12345"
+    record.token = "mock_secret_token_value_67890"
     record.password = "MySuperSecretPassword"
     record.card_number = "4111111111111111"
 
@@ -696,5 +696,5 @@ def test_structured_log_formatter_redacts_credentials():
     assert parsed["token"] == "[REDACTED]"
     assert parsed["password"] == "[REDACTED]"
     assert parsed["card_number"] == "[REDACTED]"
-    assert "sk_live_secret_key_12345" not in formatted_json
+    assert "mock_secret_api_key_12345" not in formatted_json
     assert "MySuperSecretPassword" not in formatted_json

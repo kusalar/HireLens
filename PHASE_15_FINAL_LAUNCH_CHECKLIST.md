@@ -37,14 +37,14 @@ Before pointing production DNS to the live deployment:
 
 ### 2.2 Payment Gateway Live Credentials
 - [ ] **Razorpay (India / INR):**
-  - Set live `RAZORPAY_KEY_ID` (`rzp_live_...`).
+  - Set live `RAZORPAY_KEY_ID` (live key identifier).
   - Set live `RAZORPAY_KEY_SECRET`.
   - Set live `RAZORPAY_WEBHOOK_SECRET` matching the registered endpoint:  
     `https://api.hirelens.ai/api/v1/billing/webhooks/razorpay`.
 - [ ] **Stripe (International / USD):**
-  - Set live `STRIPE_PUBLISHABLE_KEY` (`pk_live_...`).
-  - Set live `STRIPE_SECRET_KEY` (`sk_live_...`).
-  - Set live `STRIPE_WEBHOOK_SECRET` (`whsec_...`) matching:  
+  - Set live `STRIPE_PUBLISHABLE_KEY` (live publishable key).
+  - Set live `STRIPE_SECRET_KEY` (live secret key).
+  - Set live `STRIPE_WEBHOOK_SECRET` (live webhook signing secret) matching:  
     `https://api.hirelens.ai/api/v1/billing/webhooks/stripe`.
 
 ### 2.3 Calendar Integrations (Phase 9)

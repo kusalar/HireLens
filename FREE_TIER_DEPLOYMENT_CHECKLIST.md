@@ -53,7 +53,7 @@
   - [ ] `FALLBACK_RULE_ENGINE_ACTIVE` = `True`
   - [ ] `STORAGE_BACKEND` = `local`
   - [ ] `UPLOAD_DIR` = `./uploads`
-  - [ ] `RAZORPAY_KEY_ID` = `rzp_test_placeholder`
+  - [ ] `RAZORPAY_KEY_ID` = `mock_rzp_key_placeholder`
   - [ ] `RAZORPAY_KEY_SECRET` = `dummy_secret_for_demo`
   - [ ] `EMAIL_PROVIDER` = `console`
 - [ ] **Deployment Execution:** Click **Create Web Service**. Wait for build to complete.

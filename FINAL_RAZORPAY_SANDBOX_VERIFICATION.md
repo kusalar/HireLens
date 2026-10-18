@@ -21,7 +21,7 @@ All cryptographic verification algorithms, checkout session generation, forged s
 
 | Configuration Parameter | Environment Variable | Current Value | Required For Production |
 | :--- | :--- | :--- | :--- |
-| **Merchant Key ID** | `RAZORPAY_KEY_ID` | Not set / Unconfigured | Merchant identification in standard checkout. Sandbox key format: `rzp_test_...` |
+| **Merchant Key ID** | `RAZORPAY_KEY_ID` | Not set / Unconfigured | Merchant identification in standard checkout. |
 | **Merchant Key Secret** | `RAZORPAY_KEY_SECRET` | Not set / Unconfigured | Server-side HMAC-SHA256 verification of `order_id\|payment_id`. |
 | **Webhook Secret** | `RAZORPAY_WEBHOOK_SECRET` | Not set / Unconfigured | Authenticating incoming webhook payloads via `X-Razorpay-Signature`. |
 | **Default Currency** | Hardcoded in adapter | `INR` | Strict INR enforcement for Indian domestic regulatory compliance. |
@@ -32,7 +32,7 @@ All cryptographic verification algorithms, checkout session generation, forged s
 
 | Verification Item | Classification | Actual Evidence & Test Results | Precise Remediation Steps |
 | :--- | :--- | :--- | :--- |
-| **1. Unconfigured Credentials Guard** | `PASS` | `test_razorpay_unconfigured_credentials_rejection`: When `RAZORPAY_KEY_ID` or `RAZORPAY_KEY_SECRET` is unset, adapter returns HTTP 503 Service Unavailable, safely instructing the client to use MOCK mode in non-production environments. | Keep default behavior; inject valid `rzp_test_...` keys when activating sandbox testing. |
+| **1. Unconfigured Credentials Guard** | `PASS` | `test_razorpay_unconfigured_credentials_rejection`: When `RAZORPAY_KEY_ID` or `RAZORPAY_KEY_SECRET` is unset, adapter returns HTTP 503 Service Unavailable, safely instructing the client to use MOCK mode in non-production environments. | Keep default behavior; inject valid test keys when activating sandbox testing. |
 | **2. Checkout Order Creation** | `PASS` | `test_razorpay_sandbox_checkout_order_creation`: Generates structured checkout session containing `session_id`, `order_id` (prefixed `order_rzp_`), `publishable_key`, `amount` in standard currency units and paise calculation, and `currency: INR`. | Inject `RAZORPAY_KEY_ID` in production `.env`. |
 | **3. Payment Signature Verification** | `PASS` | `test_razorpay_signature_verification_and_forgery_rejection`: Correctly computes `hmac.new(key_secret, f"{order_id}\|{payment_id}".encode(), sha256).hexdigest()`. Matches signature via constant-time `hmac.compare_digest()`. | No code changes needed. |
 | **4. Forged Signature Rejection** | `PASS` | `test_razorpay_signature_verification_and_forgery_rejection`: Tampered or forged signatures are rejected with `is_valid=False` and clear error description without altering database state. | No code changes needed. |
@@ -53,7 +53,7 @@ To enable live Razorpay test transactions:
    - Switch toggle at top-left to **Test Mode**.
 2. **Generate API Keys:**
    - Navigate to **Settings** -> **API Keys** -> **Generate Test Key**.
-   - Copy **Key Id** (`rzp_test_...`) and **Key Secret**.
+   - Copy **Key Id** and **Key Secret**.
 3. **Configure Webhook:**
    - Navigate to **Settings** -> **Webhooks** -> **Add New Webhook**.
    - URL: `https://<YOUR_DEPLOYED_DOMAIN>/api/v1/billing/webhooks/RAZORPAY`
@@ -65,9 +65,9 @@ To enable live Razorpay test transactions:
      - `subscription.charged`
 4. **Deploy Environment Variables:**
    ```bash
-   RAZORPAY_KEY_ID="rzp_test_xxxxxxxxxxxxxx"
-   RAZORPAY_KEY_SECRET="xxxxxxxxxxxxxxxxxxxxxxxx"
-   RAZORPAY_WEBHOOK_SECRET="xxxxxxxxxxxxxxxxxxxxxxxx"
+   RAZORPAY_KEY_ID="<YOUR_RAZORPAY_KEY_ID>"
+   RAZORPAY_KEY_SECRET="<YOUR_RAZORPAY_KEY_SECRET>"
+   RAZORPAY_WEBHOOK_SECRET="<YOUR_RAZORPAY_WEBHOOK_SECRET>"
    ```
 5. **Execute Verification Test:**
    ```bash
